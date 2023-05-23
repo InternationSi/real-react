@@ -11,3 +11,7 @@
 
 [hasOwnProperty的文档链接]()
 [call的文档链接](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/call)
+
+
+## 2. jsx在不同环境下入参不一致
+[jsx的多种状态](https://github.com/reactjs/rfcs/blob/createlement-rfc/text/0000-create-element-changes.md#dev-only-transforms)

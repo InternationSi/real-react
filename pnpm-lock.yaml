@@ -56,11 +56,19 @@ importers:
         specifier: ^5.0.4
         version: 5.0.4
 
-  example:
+  packages/react:
     dependencies:
-      react:
-        specifier: ^1.0.0
-        version: link:../packages/react
+      shared:
+        specifier: 'workspace: *'
+        version: link:../shared
+
+  packages/react-reconciler:
+    dependencies:
+      shared:
+        specifier: 'workspace: *'
+        version: link:../shared
+
+  packages/shared: {}
 
 packages:
 
