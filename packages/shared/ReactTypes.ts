@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2023-05-21 23:33:36
  * @LastEditors: sfy
- * @LastEditTime: 2023-05-21 23:37:04
+ * @LastEditTime: 2023-05-24 22:49:07
  * @FilePath: /big-react/packages/shared/ReactTypes.ts
  * @Description: update here
  */
@@ -21,3 +21,5 @@ export interface ReactElementType {
 	ref: Ref;
 	__mark: string;
 }
+
+export type Action<State> = State | ((prevState: State) => State);
