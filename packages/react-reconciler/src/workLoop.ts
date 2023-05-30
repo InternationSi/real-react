@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2023-05-23 21:57:54
  * @LastEditors: sfy
- * @LastEditTime: 2023-05-24 23:25:45
+ * @LastEditTime: 2023-05-30 22:32:52
  * @FilePath: /big-react/packages/react-reconciler/src/workLoop.ts
  * @Description: update here
  */
@@ -10,6 +10,7 @@
 import { beginWork } from './beginWork';
 import { completeWork } from './completeWork';
 import { FiberNode, FiberRootNode, createWorkInProgress } from './fiber';
+import { NoFlags, MutationMask } from './fiberFlags';
 import { HostRoot } from './workTags';
 
 let workInProgress: FiberNode | null = null;
@@ -44,11 +45,47 @@ function renderRoot(root: FiberRootNode) {
 	do {
 		try {
 			workLoop();
+			break;
 		} catch (e) {
 			console.warn('workLoop发生错误', e);
 			workInProgress = null;
 		}
 	} while (true);
+
+	const finshedWork = root.current.alternate;
+	root.finishedWork = finshedWork;
+	commitRoot(root);
+}
+
+function commitRoot(root: FiberRootNode) {
+	const finishedWork = root.finishedWork;
+
+	if (finishedWork === null) {
+		return;
+	}
+	if (__DEV__) {
+		console.warn('commit阶段开始', finishedWork);
+	}
+
+	// 重置
+	root.finishedWork = null;
+
+	// 判断是否存在3个子阶段需要执行的操作
+	// root flags root subtreeFlags
+	const subtreeHasEffect =
+		(finishedWork.subtreeFlags & MutationMask) !== NoFlags;
+
+	const rootHasEffect = (finishedWork.flags & MutationMask) !== NoFlags;
+
+	if (subtreeHasEffect || rootHasEffect) {
+		// beforeMutation
+		// mutation Placement
+		commitMutationEffects(finishedWork);
+
+		root.current = finishedWork;
+	} else {
+		root.current = finishedWork;
+	}
 }
 
 function workLoop() {
