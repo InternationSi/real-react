@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2023-05-23 21:34:36
  * @LastEditors: sfy
- * @LastEditTime: 2023-05-28 18:30:44
+ * @LastEditTime: 2023-06-03 16:18:05
  * @FilePath: /big-react/packages/react-reconciler/src/fiber.ts
  * @Description: update here
  */
@@ -84,6 +84,7 @@ export const createWorkInProgress = (
 	} else {
 		wip.pendingProps = pendingProps;
 		wip.flags = NoFlags;
+		wip.subtreeFlags = NoFlags;
 	}
 	wip.type = current.type;
 	wip.updateQueue = current.updateQueue;

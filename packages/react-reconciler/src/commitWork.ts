@@ -2,15 +2,15 @@
  * @Author: sfy
  * @Date: 2023-05-30 22:33:14
  * @LastEditors: sfy
- * @LastEditTime: 2023-05-30 23:00:18
+ * @LastEditTime: 2023-06-03 15:55:15
  * @FilePath: /big-react/packages/react-reconciler/src/commitWork.ts
  * @Description: update here
  */
 
 import { Container, appendChildToContainer } from 'hostConfig';
-import { FiberNode } from './fiber';
+import { FiberNode, FiberRootNode } from './fiber';
 import { MutationMask, NoFlags, Placement } from './fiberFlags';
-import { HostComponent, HostText } from './workTags';
+import { HostComponent, HostRoot, HostText } from './workTags';
 
 let nextEffect: FiberNode | null = null;
 
@@ -63,6 +63,17 @@ const commitPlacement = (finishedWork: FiberNode) => {
 };
 
 function getHostParent(fiber: FiberNode): Container | null {
+	let parent = fiber.return;
+	while (parent) {
+		const parentTag = parent.tag;
+		if (parentTag === HostComponent) {
+			return parent.stateNode as Container;
+		}
+		if (parentTag === HostRoot) {
+			return (parent.stateNode as FiberRootNode).container;
+		}
+		parent = parent.return;
+	}
 	if (__DEV__) {
 		console.warn('未找到host parent');
 	}

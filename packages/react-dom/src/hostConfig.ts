@@ -2,14 +2,14 @@
  * @Author: sfy
  * @Date: 2023-05-24 23:05:33
  * @LastEditors: sfy
- * @LastEditTime: 2023-05-30 22:58:28
- * @FilePath: /big-react/packages/react-dom/hostConfig.ts
+ * @LastEditTime: 2023-06-03 16:27:27
+ * @FilePath: /big-react/packages/react-dom/src/hostConfig.ts
  * @Description: update here
  */
 export type Container = Element;
 export type Instance = Element;
 
-export const createInstance = (type: string) => {
+export const createInstance = (type: string): Instance => {
 	// TODO 处理props
 	const element = document.createElement(type);
 	return element;

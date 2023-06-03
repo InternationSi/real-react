@@ -2,18 +2,24 @@
  * @Author: sfy
  * @Date: 2023-05-23 22:08:56
  * @LastEditors: sfy
- * @LastEditTime: 2023-05-28 18:36:30
+ * @LastEditTime: 2023-06-03 18:24:09
  * @FilePath: /big-react/packages/react-reconciler/src/completeWork.ts
  * @Description: update here
  */
 
 import {
+	Container,
 	appendInitialChild,
 	createInstance,
 	createTextInstance
 } from 'hostConfig';
 import { FiberNode } from './fiber';
-import { HostComponent, HostRoot, HostText } from './workTags';
+import {
+	FunctionComponent,
+	HostComponent,
+	HostRoot,
+	HostText
+} from './workTags';
 import { NoFlags } from './fiberFlags';
 
 export const completeWork = (wip: FiberNode) => {
@@ -27,7 +33,7 @@ export const completeWork = (wip: FiberNode) => {
 				// update
 			} else {
 				// 1. 构建dom
-				const instance = createInstance(wip.type, newProps);
+				const instance = createInstance(wip.type);
 				// 2. 将DOM插入到DOM树中
 				appendAllChildren(instance, wip);
 				wip.stateNode = instance;
@@ -39,12 +45,16 @@ export const completeWork = (wip: FiberNode) => {
 				//update
 			} else {
 				// 1. 构建dom
-				const instance = createTextInstance(newProps.current);
+				const instance = createTextInstance(newProps.content);
 				wip.stateNode = instance;
 			}
 			bubbleProperties(wip);
 			return null;
 		case HostRoot:
+			bubbleProperties(wip);
+			return null;
+
+		case FunctionComponent:
 			bubbleProperties(wip);
 			return null;
 
@@ -56,7 +66,7 @@ export const completeWork = (wip: FiberNode) => {
 	}
 };
 
-function appendAllChildren(parent: FiberNode, wip: FiberNode) {
+function appendAllChildren(parent: Container, wip: FiberNode) {
 	let node = wip.child;
 	while (node !== null) {
 		if (node.tag === HostComponent || node.tag === HostText) {

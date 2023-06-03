@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2023-05-28 17:47:49
  * @LastEditors: sfy
- * @LastEditTime: 2023-05-28 18:19:08
+ * @LastEditTime: 2023-06-03 16:10:42
  * @FilePath: /big-react/packages/react-reconciler/src/childFibers.ts
  * @Description: update here
  */
@@ -59,6 +59,12 @@ function ChildReconciler(shouldTrackEffect: boolean) {
 					return placeSingleChild(
 						reconcileSingleElement(returnFiber, currentFiber, newChild)
 					);
+
+				default:
+					if (__DEV__) {
+						console.warn('未实现的reconcile类型', newChild);
+					}
+					break;
 			}
 		}
 
