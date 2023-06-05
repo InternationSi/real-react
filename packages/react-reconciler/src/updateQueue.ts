@@ -2,10 +2,11 @@
  * @Author: sfy
  * @Date: 2023-05-24 22:46:24
  * @LastEditors: sfy
- * @LastEditTime: 2023-05-24 23:01:24
- * @FilePath: /big-react/packages/react-reconciler/src/hostConfig.ts
+ * @LastEditTime: 2023-06-05 22:30:01
+ * @FilePath: /big-react/packages/react-reconciler/src/updateQueue.ts
  * @Description: update here
  */
+import { Dispatch } from 'react/src/currentDispatcher';
 import { Action } from 'shared/ReactTypes';
 
 export interface Update<State> {
@@ -16,6 +17,7 @@ export interface UpdateQueue<State> {
 	shared: {
 		pending: Update<State> | null;
 	};
+	dispatch: Dispatch<State> | null;
 }
 
 export const createUpdate = <State>(action: Action<State>) => {
@@ -28,7 +30,8 @@ export const createUpdateQueue = <State>() => {
 	return {
 		shared: {
 			pending: null
-		}
+		},
+		dispatch: null
 	} as UpdateQueue<State>;
 };
 
