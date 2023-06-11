@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2023-05-22 22:45:21
  * @LastEditors: sfy
- * @LastEditTime: 2023-05-22 23:20:58
+ * @LastEditTime: 2023-06-11 23:21:40
  * @FilePath: /big-react/scripts/rollup/react.config.js
  * @Description: update here
  */
@@ -46,12 +46,12 @@ export default [
 		output: [
 			{
 				file: `${pkgDistPath}/jsx-runtime.js`,
-				name: 'jsx-runtime.js',
+				name: 'jsx-runtime',
 				format: 'umd'
 			},
 			{
 				file: `${pkgDistPath}/jsx-dev-runtime.js`,
-				name: 'jsx-dev-runtime.js',
+				name: 'jsx-dev-runtime',
 				format: 'umd'
 			}
 		],

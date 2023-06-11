@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2023-06-03 15:30:49
  * @LastEditors: sfy
- * @LastEditTime: 2023-06-05 22:51:46
+ * @LastEditTime: 2023-06-11 23:19:20
  * @FilePath: /big-react/scripts/rollup/react-dom.config.js
  * @Description: update here
  */
@@ -24,12 +24,12 @@ export default [
 		output: [
 			{
 				file: `${pkgDistPath}/index.js`,
-				name: 'index.js',
+				name: 'ReactDOM',
 				format: 'umd'
 			},
 			{
 				file: `${pkgDistPath}/client.js`,
-				name: 'client.js',
+				name: 'client',
 				format: 'umd'
 			}
 		],
@@ -56,5 +56,18 @@ export default [
 				})
 			})
 		]
+	},
+	// react-test-utils
+	{
+		input: `${pkgPath}/test-utils.ts`,
+		output: [
+			{
+				file: `${pkgDistPath}/test-utils.js`,
+				name: 'testUtils',
+				format: 'umd'
+			}
+		],
+		external: ['react-dom', 'react'],
+		plugins: getBaseRollupPlugins()
 	}
 ];

@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2023-05-21 23:27:01
  * @LastEditors: sfy
- * @LastEditTime: 2023-05-22 23:34:18
+ * @LastEditTime: 2023-06-11 23:31:46
  * @FilePath: /big-react/packages/react/src/jsx.ts
  * @Description: update here
  */
@@ -35,6 +35,14 @@ const ReactElement = function (
 	};
 	return element;
 };
+
+export function isValidElement(object: any) {
+	return (
+		typeof object === 'object' &&
+		object !== null &&
+		object.$$typeof === REACT_ELEMENT_TYPE
+	);
+}
 
 export const jsx = (type: ElementType, config: any, ...maybeChildren: any) => {
 	let key: Key = null;
