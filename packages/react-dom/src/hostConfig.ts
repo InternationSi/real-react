@@ -1,13 +1,17 @@
+import { FiberNode } from 'react-reconciler/src/fiber';
+import { HostText } from 'react-reconciler/src/workTags';
+
 /*
  * @Author: sfy
  * @Date: 2023-05-24 23:05:33
  * @LastEditors: sfy
- * @LastEditTime: 2023-06-03 16:27:27
+ * @LastEditTime: 2023-06-12 22:12:34
  * @FilePath: /big-react/packages/react-dom/src/hostConfig.ts
  * @Description: update here
  */
 export type Container = Element;
 export type Instance = Element;
+export type TextInstance = Text;
 
 export const createInstance = (type: string): Instance => {
 	// TODO 处理props
@@ -27,3 +31,27 @@ export const createTextInstance = (content: string) => {
 };
 
 export const appendChildToContainer = appendInitialChild;
+
+export function commitUpdate(fiber: FiberNode) {
+	switch (fiber.tag) {
+		case HostText:
+			const text = fiber.memoizedProps.content;
+			return commitTextUpdate(fiber.stateNode, text);
+		default:
+			if (__DEV__) {
+				console.warn('未实现的Update类型', fiber);
+			}
+			break;
+	}
+}
+
+export function commitTextUpdate(textInstance: TextInstance, content: string) {
+	textInstance.textContent = content;
+}
+
+export function removeChild(
+	child: Instance | TextInstance,
+	container: Container
+) {
+	container.removeChild(child);
+}

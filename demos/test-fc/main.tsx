@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2023-06-03 18:26:03
  * @LastEditors: sfy
- * @LastEditTime: 2023-06-05 22:51:04
+ * @LastEditTime: 2023-06-12 22:45:28
  * @FilePath: /big-react/demos/test-fc/main.tsx
  * @Description: update here
  */
@@ -12,7 +12,7 @@ import ReactDOM from 'react-dom/client';
 function App() {
 	const [num, setNum] = useState(100);
 	(window as any).setNum = setNum;
-	return <div>{num}</div>;
+	return num === 3 ? <Child onClick={() => setNum(111)} /> : <div>{num}</div>;
 }
 
 function Child() {

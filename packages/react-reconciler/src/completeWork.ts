@@ -1,29 +1,25 @@
-/*
- * @Author: sfy
- * @Date: 2023-05-23 22:08:56
- * @LastEditors: sfy
- * @LastEditTime: 2023-06-03 18:24:09
- * @FilePath: /big-react/packages/react-reconciler/src/completeWork.ts
- * @Description: update here
- */
-
 import {
-	Container,
 	appendInitialChild,
+	Container,
 	createInstance,
 	createTextInstance
 } from 'hostConfig';
 import { FiberNode } from './fiber';
+import { NoFlags, Update } from './fiberFlags';
 import {
-	FunctionComponent,
-	HostComponent,
 	HostRoot,
-	HostText
+	HostText,
+	HostComponent,
+	FunctionComponent
 } from './workTags';
-import { NoFlags } from './fiberFlags';
+
+function markUpdate(fiber: FiberNode) {
+	fiber.flags |= Update;
+}
 
 export const completeWork = (wip: FiberNode) => {
 	// 递归中的归
+
 	const newProps = wip.pendingProps;
 	const current = wip.alternate;
 
@@ -32,7 +28,8 @@ export const completeWork = (wip: FiberNode) => {
 			if (current !== null && wip.stateNode) {
 				// update
 			} else {
-				// 1. 构建dom
+				// 1. 构建DOM
+				// const instance = createInstance(wip.type, newProps);
 				const instance = createInstance(wip.type);
 				// 2. 将DOM插入到DOM树中
 				appendAllChildren(instance, wip);
@@ -42,9 +39,14 @@ export const completeWork = (wip: FiberNode) => {
 			return null;
 		case HostText:
 			if (current !== null && wip.stateNode) {
-				//update
+				// update
+				const oldText = current.memoizedProps.content;
+				const newText = newProps.content;
+				if (oldText !== newText) {
+					markUpdate(wip);
+				}
 			} else {
-				// 1. 构建dom
+				// 1. 构建DOM
 				const instance = createTextInstance(newProps.content);
 				wip.stateNode = instance;
 			}
@@ -53,11 +55,9 @@ export const completeWork = (wip: FiberNode) => {
 		case HostRoot:
 			bubbleProperties(wip);
 			return null;
-
 		case FunctionComponent:
 			bubbleProperties(wip);
 			return null;
-
 		default:
 			if (__DEV__) {
 				console.warn('未处理的completeWork情况', wip);
@@ -68,6 +68,7 @@ export const completeWork = (wip: FiberNode) => {
 
 function appendAllChildren(parent: Container, wip: FiberNode) {
 	let node = wip.child;
+
 	while (node !== null) {
 		if (node.tag === HostComponent || node.tag === HostText) {
 			appendInitialChild(parent, node?.stateNode);
@@ -76,9 +77,11 @@ function appendAllChildren(parent: Container, wip: FiberNode) {
 			node = node.child;
 			continue;
 		}
+
 		if (node === wip) {
 			return;
 		}
+
 		while (node.sibling === null) {
 			if (node.return === null || node.return === wip) {
 				return;
@@ -93,6 +96,7 @@ function appendAllChildren(parent: Container, wip: FiberNode) {
 function bubbleProperties(wip: FiberNode) {
 	let subtreeFlags = NoFlags;
 	let child = wip.child;
+
 	while (child !== null) {
 		subtreeFlags |= child.subtreeFlags;
 		subtreeFlags |= child.flags;

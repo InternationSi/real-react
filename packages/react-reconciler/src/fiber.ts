@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2023-05-23 21:34:36
  * @LastEditors: sfy
- * @LastEditTime: 2023-06-03 16:18:05
+ * @LastEditTime: 2023-06-12 22:05:58
  * @FilePath: /big-react/packages/react-reconciler/src/fiber.ts
  * @Description: update here
  */
@@ -29,6 +29,7 @@ export class FiberNode {
 	flags: Flags;
 	subtreeFlags: Flags;
 	updateQueue: unknown;
+	deletions: FiberNode[] | null;
 
 	constructor(tag: WorkTag, pendingProps: Props, key: Key) {
 		// 实例
@@ -55,6 +56,7 @@ export class FiberNode {
 		this.alternate = null;
 		this.flags = NoFlags;
 		this.subtreeFlags = NoFlags;
+		this.deletions = null;
 	}
 }
 
@@ -85,6 +87,7 @@ export const createWorkInProgress = (
 		wip.pendingProps = pendingProps;
 		wip.flags = NoFlags;
 		wip.subtreeFlags = NoFlags;
+		wip.deletions = null;
 	}
 	wip.type = current.type;
 	wip.updateQueue = current.updateQueue;
