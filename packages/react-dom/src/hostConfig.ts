@@ -1,22 +1,17 @@
 import { FiberNode } from 'react-reconciler/src/fiber';
-import { HostText } from 'react-reconciler/src/workTags';
+import { HostComponent, HostText } from 'react-reconciler/src/workTags';
+import { Props } from 'shared/ReactTypes';
+import { updateFiberProps, DOMElement } from './SyntheticEvent';
 
-/*
- * @Author: sfy
- * @Date: 2023-05-24 23:05:33
- * @LastEditors: sfy
- * @LastEditTime: 2023-06-12 22:12:34
- * @FilePath: /big-react/packages/react-dom/src/hostConfig.ts
- * @Description: update here
- */
 export type Container = Element;
 export type Instance = Element;
 export type TextInstance = Text;
 
-export const createInstance = (type: string): Instance => {
+export const createInstance = (type: string, props: Props): Instance => {
 	// TODO 处理props
-	const element = document.createElement(type);
-	return element;
+	const element = document.createElement(type) as unknown;
+	updateFiberProps(element as DOMElement, props);
+	return element as DOMElement;
 };
 
 export const appendInitialChild = (
